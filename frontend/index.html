@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>HireLens | AI Interview Evaluation</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #080b12;
+    color: #ffffff;
+}
+
+.container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 30px 20px 60px;
+}
+
+/* HEADER */
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 35px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo-box {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #5b8cff, #8b5cf6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 22px;
+}
+
+.logo h1 {
+    margin: 0;
+    font-size: 22px;
+}
+
+.status {
+    padding: 8px 14px;
+    border-radius: 20px;
+    background: #10251f;
+    color: #35d0a7;
+    font-size: 13px;
+}
+
+/* HERO */
+
+.hero {
+    margin-bottom: 30px;
+}
+
+.hero h2 {
+    font-size: 34px;
+    margin-bottom: 10px;
+}
+
+.hero p {
+    color: #8f99aa;
+    margin: 0;
+}
+
+/* CARDS */
+
+.card {
+    background: #101521;
+    border: 1px solid #252d3d;
+    border-radius: 18px;
+    padding: 24px;
+    margin-bottom: 22px;
+}
+
+.card h3 {
+    margin-top: 0;
+    margin-bottom: 7px;
+}
+
+.subtitle {
+    color: #8993a6;
+    font-size: 13px;
+    margin-bottom: 20px;
+}
+
+/* INPUTS */
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.full {
+    grid-column: 1 / -1;
+}
+
+label {
+    display: block;
+    font-size: 13px;
+    color: #cbd2de;
+    margin-bottom: 8px;
+}
+
+textarea {
+    width: 100%;
+    min-height: 160px;
+    resize: vertical;
+    background: #090d15;
+    color: white;
+    border: 1px solid #293247;
+    border-radius: 12px;
+    padding: 14px;
+    font-size: 13px;
+    outline: none;
+}
+
+textarea:focus {
+    border-color: #5b8cff;
+}
+
+/* BUTTON */
+
+.button-area {
+    text-align: right;
+    margin-top: 20px;
+}
+
+button {
+    border: none;
+    border-radius: 11px;
+    padding: 13px 22px;
+    background: linear-gradient(135deg, #527fff, #7658ed);
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+/* PIPELINE */
+
+.pipeline {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    margin-top: 25px;
+}
+
+.step {
+    background: #0b1019;
+    border: 1px solid #252d3d;
+    border-radius: 12px;
+    padding: 15px;
+    text-align: center;
+}
+
+.step-number {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #1b2434;
+    color: #5b8cff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.step strong {
+    display: block;
+    font-size: 12px;
+}
+
+.step small {
+    display: block;
+    color: #788397;
+    margin-top: 5px;
+}
+
+/* RESULTS */
+
+#results {
+    display: none;
+}
+
+.agent-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+}
+
+.agent {
+    background: #0b1019;
+    border: 1px solid #252d3d;
+    border-radius: 14px;
+    padding: 18px;
+}
+
+.agent-icon {
+    font-size: 25px;
+}
+
+.agent h4 {
+    margin: 12px 0 7px;
+}
+
+.agent p {
+    color: #8993a6;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.agent-score {
+    font-size: 24px;
+    font-weight: bold;
+    color: #35d0a7;
+}
+
+/* CANDIDATES */
+
+.candidates {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+}
+
+.candidate {
+    background: #0b1019;
+    border: 1px solid #252d3d;
+    border-radius: 15px;
+    padding: 20px;
+}
+
+.candidate-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.candidate-name {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.eligible {
+    color: #35d0a7;
+    background: #10251f;
+    padding: 6px 10px;
+    border-radius: 7px;
+    font-size: 11px;
+}
+
+.score {
+    font-size: 48px;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+.recommendation {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: #1b2434;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+ul {
+    padding-left: 18px;
+    color: #aeb7c7;
+    font-size: 13px;
+    line-height: 1.8;
+}
+
+/* DEBATE */
+
+.debate {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.message {
+    background: #0b1019;
+    border-left: 3px solid #5b8cff;
+    padding: 14px;
+    border-radius: 0 10px 10px 0;
+}
+
+.message strong {
+    font-size: 12px;
+}
+
+.message p {
+    color: #aeb7c7;
+    font-size: 12px;
+    line-height: 1.6;
+    margin-bottom: 0;
+}
+
+/* FINAL DECISION */
+
+.final {
+    text-align: center;
+    padding: 35px;
+    background:
+        radial-gradient(
+            circle at top,
+            rgba(91,140,255,0.16),
+            transparent 55%
+        ),
+        #0b1019;
+}
+
+.final-label {
+    color: #8993a6;
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 1px;
+}
+
+.winner {
+    font-size: 34px;
+    font-weight: bold;
+    margin: 12px 0;
+}
+
+.confidence {
+    display: inline-block;
+    padding: 7px 12px;
+    background: #10251f;
+    color: #35d0a7;
+    border-radius: 20px;
+    font-size: 12px;
+}
+
+.reasoning {
+    max-width: 750px;
+    margin: 20px auto 0;
+    color: #aeb7c7;
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+/* FOOTER */
+
+footer {
+    text-align: center;
+    color: #687386;
+    font-size: 12px;
+    margin-top: 35px;
+}
+
+/* MOBILE */
+
+@media (max-width: 800px) {
+
+    .grid,
+    .candidates {
+        grid-template-columns: 1fr;
+    }
+
+    .full {
+        grid-column: auto;
+    }
+
+    .agent-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .pipeline {
+        grid-template-columns: 1fr 1fr;
+    }
+
+}
+
+@media (max-width: 500px) {
+
+    .container {
+        padding: 20px 12px;
+    }
+
+    header {
+        align-items: flex-start;
+    }
+
+    .hero h2 {
+        font-size: 27px;
+    }
+
+    .agent-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .pipeline {
+        grid-template-columns: 1fr;
+    }
+
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<header>
+
+    <div class="logo">
+
+        <div class="logo-box">
+            H
+        </div>
+
+        <h1>HireLens</h1>
+
+    </div>
+
+    <div class="status">
+        ● Evaluation Engine Ready
+    </div>
+
+</header>
+
+
+<section class="hero">
+
+    <h2>AI Multi-Agent Interview Evaluation</h2>
+
+    <p>
+        Evidence-grounded candidate evaluation using four independent
+        AI personas, structured debate, deterministic scoring and
+        comparative decision making.
+    </p>
+
+</section>
+
+
+<!-- INPUT SECTION -->
+
+<section class="card">
+
+    <h3>Start Evaluation</h3>
+
+    <div class="subtitle">
+        Enter the job description and candidate information.
+    </div>
+
+
+    <div class="grid">
+
+        <div class="full">
+
+            <label>Job Description</label>
+
+            <textarea
+                id="jd"
+                placeholder="Paste the job description here..."
+            ></textarea>
+
+        </div>
+
+
+        <div>
+
+            <label>Candidate A — Resume</label>
+
+            <textarea
+                id="resumeA"
+                placeholder="Paste Candidate A resume..."
+            ></textarea>
+
+        </div>
+
+
+        <div>
+
+            <label>Candidate B — Resume</label>
+
+            <textarea
+                id="resumeB"
+                placeholder="Paste Candidate B resume..."
+            ></textarea>
+
+        </div>
+
+
+        <div>
+
+            <label>Candidate A — Interview Transcript</label>
+
+            <textarea
+                id="transcriptA"
+                placeholder="Paste Candidate A interview transcript..."
+            ></textarea>
+
+        </div>
+
+
+        <div>
+
+            <label>Candidate B — Interview Transcript</label>
+
+            <textarea
+                id="transcriptB"
+                placeholder="Paste Candidate B interview transcript..."
+            ></textarea>
+
+        </div>
+
+    </div>
+
+
+    <!-- PIPELINE -->
+
+    <div class="pipeline">
+
+        <div class="step">
+
+            <div class="step-number">1</div>
+
+            <strong>Evidence</strong>
+
+            <small>
+                Resume + transcript
+            </small>
+
+        </div>
+
+
+        <div class="step">
+
+            <div class="step-number">2</div>
+
+            <strong>Blind Review</strong>
+
+            <small>
+                Four agents
+            </small>
+
+        </div>
+
+
+        <div class="step">
+
+            <div class="step-number">3</div>
+
+            <strong>Debate</strong>
+
+            <small>
+                Agent interaction
+            </small>
+
+        </div>
+
+
+        <div class="step">
+
+            <div class="step-number">4</div>
+
+            <strong>Revision</strong>
+
+            <small>
+                Post-debate
+            </small>
+
+        </div>
+
+
+        <div class="step">
+
+            <div class="step-number">5</div>
+
+            <strong>Decision</strong>
+
+            <small>
+                Candidate comparison
+            </small>
+
+        </div>
+
+    </div>
+
+
+    <div class="button-area">
+
+        <button onclick="runEvaluation()">
+            Run Evaluation →
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- RESULTS -->
+
+<section id="results">
+
+
+    <!-- AGENTS -->
+
+    <section class="card">
+
+        <h3>Independent Agent Panel</h3>
+
+        <div class="subtitle">
+            Each persona evaluates independently before interacting
+            with the other agents.
+        </div>
+
+
+        <div class="agent-grid">
+
+
+            <div class="agent">
+
+                <div class="agent-icon">⚙️</div>
+
+                <h4>Technical Agent</h4>
+
+                <div class="agent-score">
+                    8.7
+                </div>
+
+                <p>
+                    Evaluates Python/backend depth, AI/LLM systems,
+                    RAG, architecture and production reliability.
+                </p>
+
+            </div>
+
+
+            <div class="agent">
+
+                <div class="agent-icon">👥</div>
+
+                <h4>HR / Culture Agent</h4>
+
+                <div class="agent-score">
+                    8.1
+                </div>
+
+                <p>
+                    Evaluates communication, ownership,
+                    transparency, teamwork and stability.
+                </p>
+
+            </div>
+
+
+            <div class="agent">
+
+                <div class="agent-icon">🎯</div>
+
+                <h4>Hiring Manager Agent</h4>
+
+                <div class="agent-score">
+                    7.8
+                </div>
+
+                <p>
+                    Evaluates delivery capability, business impact,
+                    domain relevance and ramp-up speed.
+                </p>
+
+            </div>
+
+
+            <div class="agent">
+
+                <div class="agent-icon">🔍</div>
+
+                <h4>Skeptic Agent</h4>
+
+                <div class="agent-score">
+                    7.1
+                </div>
+
+                <p>
+                    Searches for contradictions, unsupported claims,
+                    inflated achievements and hidden risks.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- CANDIDATES -->
+
+    <section class="card">
+
+        <h3>Candidate Results</h3>
+
+        <div class="subtitle">
+            Final scores after debate, revision and deterministic
+            eligibility checks.
+        </div>
+
+
+        <div class="candidates">
+
+
+            <div class="candidate">
+
+                <div class="candidate-header">
+
+                    <div class="candidate-name">
+                        Candidate A
+                    </div>
+
+                    <div class="eligible">
+                        ✓ ELIGIBLE
+                    </div>
+
+                </div>
+
+
+                <div class="score">
+                    8.2
+                </div>
+
+                <div style="color:#8993a6;font-size:12px;">
+                    Final score / 10
+                </div>
+
+
+                <div class="recommendation">
+                    STRONG HIRE
+                </div>
+
+
+                <ul>
+
+                    <li>
+                        Strong production ownership
+                    </li>
+
+                    <li>
+                        Relevant technical experience
+                    </li>
+
+                    <li>
+                        Strong evidence supporting delivery
+                    </li>
+
+                </ul>
+
+            </div>
+
+
+            <div class="candidate">
+
+                <div class="candidate-header">
+
+                    <div class="candidate-name">
+                        Candidate B
+                    </div>
+
+                    <div class="eligible">
+                        ✓ ELIGIBLE
+                    </div>
+
+                </div>
+
+
+                <div class="score">
+                    7.5
+                </div>
+
+                <div style="color:#8993a6;font-size:12px;">
+                    Final score / 10
+                </div>
+
+
+                <div class="recommendation">
+                    HIRE
+                </div>
+
+
+                <ul>
+
+                    <li>
+                        Strong communication
+                    </li>
+
+                    <li>
+                        Good adaptability
+                    </li>
+
+                    <li>
+                        Some technical uncertainty
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- DEBATE -->
+
+    <section class="card">
+
+        <h3>Multi-Agent Debate</h3>
+
+        <div class="subtitle">
+            Agents challenge and respond to each other's reasoning.
+        </div>
+
+
+        <div class="debate">
+
+
+            <div class="message">
+
+                <strong>
+                    Technical → Skeptic
+                </strong>
+
+                <p>
+                    The candidate's production architecture claims
+                    are supported by documented implementation
+                    experience.
+                </p>
+
+            </div>
+
+
+            <div class="message">
+
+                <strong>
+                    Skeptic → Hiring Manager
+                </strong>
+
+                <p>
+                    Claimed performance improvements should be
+                    treated cautiously when the underlying benchmark
+                    is not independently established.
+                </p>
+
+            </div>
+
+
+            <div class="message">
+
+                <strong>
+                    Hiring Manager → HR / Culture
+                </strong>
+
+                <p>
+                    The interview demonstrates ownership and
+                    responsibility for delivered work.
+                </p>
+
+            </div>
+
+
+            <div class="message">
+
+                <strong>
+                    HR / Culture → Technical
+                </strong>
+
+                <p>
+                    The candidate's interview explanation is
+                    consistent with the technical responsibilities
+                    described in the resume.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- FINAL -->
+
+    <section class="card">
+
+        <div class="final">
+
+            <div class="final-label">
+                Recommended Candidate
+            </div>
+
+
+            <div class="winner">
+                Candidate A
+            </div>
+
+
+            <div class="confidence">
+                86% Confidence
+            </div>
+
+
+            <div class="reasoning">
+
+                Candidate A demonstrates the stronger combination
+                of technical capability, production ownership and
+                role relevance. Candidate B remains eligible and
+                competitive, but Candidate A has stronger evidence
+                supporting immediate delivery in the target role.
+
+            </div>
+
+        </div>
+
+    </section>
+
+</section>
+
+
+<footer>
+
+    HireLens — Evidence-Grounded Multi-Agent Hiring System
+
+</footer>
+
+</div>
+
+
+<script>
+
+/*
+===========================================================
+CLOUD RUN BACKEND URL
+===========================================================
+
+After deploying your backend to Cloud Run, put the URL here.
+
+Example:
+
+const API_URL = "https://your-service-xxxxx.run.app";
+
+Leave it empty for now to use demo mode.
+
+===========================================================
+*/
+
+const API_URL = "";
+
+
+/*
+===========================================================
+RUN EVALUATION
+===========================================================
+*/
+
+async function runEvaluation() {
+
+    const jd =
+        document.getElementById("jd").value.trim();
+
+    const resumeA =
+        document.getElementById("resumeA").value.trim();
+
+    const resumeB =
+        document.getElementById("resumeB").value.trim();
+
+    const transcriptA =
+        document.getElementById("transcriptA").value.trim();
+
+    const transcriptB =
+        document.getElementById("transcriptB").value.trim();
+
+
+    if (!jd) {
+
+        alert("Please enter the Job Description.");
+
+        return;
+
+    }
+
+
+    if (!resumeA || !resumeB) {
+
+        alert("Please enter both candidate resumes.");
+
+        return;
+
+    }
+
+
+    /*
+    =======================================================
+    REAL BACKEND REQUEST
+    =======================================================
+    */
+
+    if (API_URL !== "") {
+
+        try {
+
+            const response = await fetch(
+                API_URL + "/evaluate",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        jd: jd,
+
+                        candidate_a: {
+
+                            resume: resumeA,
+
+                            transcript: transcriptA
+
+                        },
+
+                        candidate_b: {
+
+                            resume: resumeB,
+
+                            transcript: transcriptB
+
+                        }
+
+                    })
+
+                }
+            );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Server returned " + response.status
+                );
+
+            }
+
+
+            const data =
+                await response.json();
+
+
+            displayBackendResult(data);
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert(
+                "Could not connect to the Cloud Run backend."
+            );
+
+        }
+
+        return;
+
+    }
+
+
+    /*
+    =======================================================
+    DEMO MODE
+    =======================================================
+
+    This displays the frontend while the backend is being
+    deployed.
+
+    =======================================================
+    */
+
+    const results =
+        document.getElementById("results");
+
+    results.style.display = "block";
+
+    results.scrollIntoView({
+        behavior: "smooth"
+    });
+
+}
+
+
+/*
+===========================================================
+BACKEND RESULT HANDLER
+===========================================================
+
+This function is ready for connection to your backend.
+
+The exact field names can be adjusted once the final
+FastAPI response schema is fixed.
+===========================================================
+*/
+
+function displayBackendResult(data) {
+
+    console.log(
+        "Backend evaluation:",
+        data
+    );
+
+
+    const results =
+        document.getElementById("results");
+
+    results.style.display = "block";
+
+
+    results.scrollIntoView({
+        behavior: "smooth"
+    });
+
+}
+
+
+/*
+===========================================================
+CTRL + ENTER SHORTCUT
+===========================================================
+*/
+
+document
+    .getElementById("jd")
+    .addEventListener(
+        "keydown",
+        function(event) {
+
+            if (
+                event.ctrlKey &&
+                event.key === "Enter"
+            ) {
+
+                runEvaluation();
+
+            }
+
+        }
+    );
+
+</script>
+
+</body>
+</html>
