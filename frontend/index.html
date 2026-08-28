@@ -1,1176 +1,1348 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>HireLens | AI Interview Evaluation</title>
-
-<style>
-* {
-    box-sizing: border-box;
-}
-
-body {
-    margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    background: #080b12;
-    color: #ffffff;
-}
-
-.container {
-    max-width: 1200px;
-    margin: auto;
-    padding: 30px 20px 60px;
-}
-
-/* HEADER */
-
-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 35px;
-}
-
-.logo {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.logo-box {
-    width: 42px;
-    height: 42px;
-    border-radius: 12px;
-    background: linear-gradient(135deg, #5b8cff, #8b5cf6);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    font-size: 22px;
-}
-
-.logo h1 {
-    margin: 0;
-    font-size: 22px;
-}
-
-.status {
-    padding: 8px 14px;
-    border-radius: 20px;
-    background: #10251f;
-    color: #35d0a7;
-    font-size: 13px;
-}
-
-/* HERO */
-
-.hero {
-    margin-bottom: 30px;
-}
-
-.hero h2 {
-    font-size: 34px;
-    margin-bottom: 10px;
-}
-
-.hero p {
-    color: #8f99aa;
-    margin: 0;
-}
-
-/* CARDS */
-
-.card {
-    background: #101521;
-    border: 1px solid #252d3d;
-    border-radius: 18px;
-    padding: 24px;
-    margin-bottom: 22px;
-}
-
-.card h3 {
-    margin-top: 0;
-    margin-bottom: 7px;
-}
-
-.subtitle {
-    color: #8993a6;
-    font-size: 13px;
-    margin-bottom: 20px;
-}
-
-/* INPUTS */
-
-.grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-}
-
-.full {
-    grid-column: 1 / -1;
-}
-
-label {
-    display: block;
-    font-size: 13px;
-    color: #cbd2de;
-    margin-bottom: 8px;
-}
-
-textarea {
-    width: 100%;
-    min-height: 160px;
-    resize: vertical;
-    background: #090d15;
-    color: white;
-    border: 1px solid #293247;
-    border-radius: 12px;
-    padding: 14px;
-    font-size: 13px;
-    outline: none;
-}
-
-textarea:focus {
-    border-color: #5b8cff;
-}
-
-/* BUTTON */
-
-.button-area {
-    text-align: right;
-    margin-top: 20px;
-}
-
-button {
-    border: none;
-    border-radius: 11px;
-    padding: 13px 22px;
-    background: linear-gradient(135deg, #527fff, #7658ed);
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-button:hover {
-    opacity: 0.9;
-}
-
-/* PIPELINE */
-
-.pipeline {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 10px;
-    margin-top: 25px;
-}
-
-.step {
-    background: #0b1019;
-    border: 1px solid #252d3d;
-    border-radius: 12px;
-    padding: 15px;
-    text-align: center;
-}
-
-.step-number {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    background: #1b2434;
-    color: #5b8cff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: auto;
-    margin-bottom: 8px;
-    font-weight: bold;
-}
-
-.step strong {
-    display: block;
-    font-size: 12px;
-}
-
-.step small {
-    display: block;
-    color: #788397;
-    margin-top: 5px;
-}
-
-/* RESULTS */
-
-#results {
-    display: none;
-}
-
-.agent-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 15px;
-}
-
-.agent {
-    background: #0b1019;
-    border: 1px solid #252d3d;
-    border-radius: 14px;
-    padding: 18px;
-}
-
-.agent-icon {
-    font-size: 25px;
-}
-
-.agent h4 {
-    margin: 12px 0 7px;
-}
-
-.agent p {
-    color: #8993a6;
-    font-size: 12px;
-    line-height: 1.5;
-}
-
-.agent-score {
-    font-size: 24px;
-    font-weight: bold;
-    color: #35d0a7;
-}
-
-/* CANDIDATES */
-
-.candidates {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 18px;
-}
-
-.candidate {
-    background: #0b1019;
-    border: 1px solid #252d3d;
-    border-radius: 15px;
-    padding: 20px;
-}
-
-.candidate-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.candidate-name {
-    font-size: 20px;
-    font-weight: bold;
-}
-
-.eligible {
-    color: #35d0a7;
-    background: #10251f;
-    padding: 6px 10px;
-    border-radius: 7px;
-    font-size: 11px;
-}
-
-.score {
-    font-size: 48px;
-    font-weight: bold;
-    margin-top: 20px;
-}
-
-.recommendation {
-    display: inline-block;
-    margin-top: 10px;
-    padding: 8px 12px;
-    border-radius: 8px;
-    background: #1b2434;
-    font-size: 11px;
-    font-weight: bold;
-}
-
-ul {
-    padding-left: 18px;
-    color: #aeb7c7;
-    font-size: 13px;
-    line-height: 1.8;
-}
-
-/* DEBATE */
-
-.debate {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.message {
-    background: #0b1019;
-    border-left: 3px solid #5b8cff;
-    padding: 14px;
-    border-radius: 0 10px 10px 0;
-}
-
-.message strong {
-    font-size: 12px;
-}
-
-.message p {
-    color: #aeb7c7;
-    font-size: 12px;
-    line-height: 1.6;
-    margin-bottom: 0;
-}
-
-/* FINAL DECISION */
-
-.final {
-    text-align: center;
-    padding: 35px;
-    background:
-        radial-gradient(
-            circle at top,
-            rgba(91,140,255,0.16),
-            transparent 55%
-        ),
-        #0b1019;
-}
-
-.final-label {
-    color: #8993a6;
-    text-transform: uppercase;
-    font-size: 11px;
-    letter-spacing: 1px;
-}
-
-.winner {
-    font-size: 34px;
-    font-weight: bold;
-    margin: 12px 0;
-}
-
-.confidence {
-    display: inline-block;
-    padding: 7px 12px;
-    background: #10251f;
-    color: #35d0a7;
-    border-radius: 20px;
-    font-size: 12px;
-}
-
-.reasoning {
-    max-width: 750px;
-    margin: 20px auto 0;
-    color: #aeb7c7;
-    font-size: 13px;
-    line-height: 1.7;
-}
-
-/* FOOTER */
-
-footer {
-    text-align: center;
-    color: #687386;
-    font-size: 12px;
-    margin-top: 35px;
-}
-
-/* MOBILE */
-
-@media (max-width: 800px) {
-
-    .grid,
-    .candidates {
-        grid-template-columns: 1fr;
-    }
-
-    .full {
-        grid-column: auto;
-    }
-
-    .agent-grid {
-        grid-template-columns: 1fr 1fr;
-    }
-
-    .pipeline {
-        grid-template-columns: 1fr 1fr;
-    }
-
-}
-
-@media (max-width: 500px) {
-
-    .container {
-        padding: 20px 12px;
-    }
-
-    header {
-        align-items: flex-start;
-    }
-
-    .hero h2 {
-        font-size: 27px;
-    }
-
-    .agent-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .pipeline {
-        grid-template-columns: 1fr;
-    }
-
-}
-</style>
+    <meta charset="UTF-8">
+
+    <!-- Accessibility + responsive layout -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="description"
+        content="Evidence-grounded multi-agent AI interview evaluation panel"
+    >
+
+    <title>AI Interview Evaluation Panel</title>
+
+    <style>
+        :root {
+            --bg: #f5f7fb;
+            --card: #ffffff;
+            --text: #172033;
+            --muted: #5d687a;
+            --border: #d9deea;
+            --primary: #3157d5;
+            --primary-dark: #2343ad;
+            --success: #16794c;
+            --danger: #b42318;
+            --warning: #9a6700;
+            --focus: #111827;
+            --shadow: 0 10px 30px rgba(20, 35, 70, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: var(--bg);
+            color: var(--text);
+            font-family:
+                Inter,
+                system-ui,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                Arial,
+                sans-serif;
+            line-height: 1.6;
+        }
+
+        button,
+        textarea,
+        input {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        button:focus-visible,
+        textarea:focus-visible,
+        input:focus-visible,
+        summary:focus-visible {
+            outline: 3px solid var(--focus);
+            outline-offset: 3px;
+        }
+
+        .skip-link {
+            position: absolute;
+            left: -9999px;
+            top: 10px;
+            z-index: 9999;
+            background: white;
+            color: black;
+            padding: 12px 16px;
+            border-radius: 8px;
+        }
+
+        .skip-link:focus {
+            left: 10px;
+        }
+
+        header {
+            background: #111827;
+            color: white;
+            padding: 32px 20px;
+        }
+
+        .header-inner {
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        .eyebrow {
+            margin: 0 0 5px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            opacity: 0.8;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: clamp(1.8rem, 5vw, 3rem);
+            line-height: 1.15;
+        }
+
+        .subtitle {
+            max-width: 760px;
+            margin: 12px 0 0;
+            color: #dbe3f2;
+        }
+
+        main {
+            width: min(1100px, calc(100% - 32px));
+            margin: 32px auto 60px;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        h2 {
+            margin-top: 0;
+            font-size: 1.35rem;
+        }
+
+        h3 {
+            margin-bottom: 8px;
+        }
+
+        .help {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-top: 4px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: 700;
+        }
+
+        .required {
+            color: var(--danger);
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 180px;
+            resize: vertical;
+            padding: 12px 14px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            color: var(--text);
+            background: white;
+        }
+
+        textarea::placeholder {
+            color: #6b7280;
+        }
+
+        textarea:hover {
+            border-color: #aeb7c9;
+        }
+
+        textarea:focus {
+            border-color: var(--primary);
+        }
+
+        .candidate-card {
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 20px;
+            background: #fbfcff;
+        }
+
+        .candidate-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .candidate-title h3 {
+            margin: 0;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 5px 10px;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            background: #e8ecf7;
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 22px;
+        }
+
+        .primary-btn,
+        .secondary-btn {
+            min-height: 48px;
+            border-radius: 10px;
+            padding: 11px 18px;
+            font-weight: 700;
+            border: 2px solid transparent;
+        }
+
+        .primary-btn {
+            background: var(--primary);
+            color: white;
+        }
+
+        .primary-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .secondary-btn {
+            background: white;
+            color: var(--text);
+            border-color: var(--border);
+        }
+
+        .secondary-btn:hover {
+            background: #f0f3f9;
+        }
+
+        .primary-btn:disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
+        }
+
+        .status {
+            margin-top: 18px;
+            padding: 13px 15px;
+            border-radius: 10px;
+            background: #eef2f7;
+            color: var(--text);
+        }
+
+        .status.success {
+            background: #eaf7f0;
+            color: var(--success);
+        }
+
+        .status.error {
+            background: #fff0ee;
+            color: var(--danger);
+        }
+
+        .status.loading {
+            background: #eef3ff;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .decision {
+            border-left: 6px solid var(--primary);
+            background: #f5f7ff;
+            padding: 18px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .decision h3 {
+            margin-top: 0;
+        }
+
+        .decision-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+        }
+
+        .score {
+            font-size: 2rem;
+            font-weight: 800;
+        }
+
+        .report-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .report {
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 20px;
+            background: white;
+        }
+
+        .report-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 14px;
+            margin-bottom: 16px;
+        }
+
+        .eligible {
+            color: var(--success);
+            font-weight: 800;
+        }
+
+        .ineligible {
+            color: var(--danger);
+            font-weight: 800;
+        }
+
+        .report-section {
+            margin-top: 18px;
+        }
+
+        .report-section h4 {
+            margin-bottom: 8px;
+        }
+
+        ul {
+            padding-left: 22px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .evidence {
+            margin-top: 8px;
+            font-size: 0.82rem;
+            color: var(--muted);
+        }
+
+        details {
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            margin-top: 12px;
+            background: #fafbfe;
+        }
+
+        summary {
+            cursor: pointer;
+            padding: 12px 14px;
+            font-weight: 700;
+        }
+
+        .details-content {
+            padding: 0 14px 14px;
+        }
+
+        pre {
+            overflow-x: auto;
+            max-height: 500px;
+            padding: 16px;
+            background: #111827;
+            color: #f8fafc;
+            border-radius: 10px;
+            font-size: 0.82rem;
+            line-height: 1.5;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 20px;
+            color: var(--muted);
+        }
+
+        .architecture {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        .architecture-step {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 15px;
+            background: white;
+        }
+
+        .architecture-step strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        @media (max-width: 800px) {
+            .grid,
+            .report-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .full {
+                grid-column: auto;
+            }
+
+            .architecture {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 500px) {
+            main {
+                width: min(100% - 20px, 1100px);
+                margin-top: 20px;
+            }
+
+            .card {
+                padding: 17px;
+                border-radius: 12px;
+            }
+
+            .architecture {
+                grid-template-columns: 1fr;
+            }
+
+            .actions button {
+                width: 100%;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-<div class="container">
+<a class="skip-link" href="#main-content">
+    Skip to main content
+</a>
 
 <header>
+    <div class="header-inner">
+        <p class="eyebrow">Evidence-grounded hiring system</p>
 
-    <div class="logo">
+        <h1>Multi-Agent AI Interview Evaluation</h1>
 
-        <div class="logo-box">
-            H
-        </div>
-
-        <h1>HireLens</h1>
-
+        <p class="subtitle">
+            Evaluate two candidates using independent technical, hiring,
+            HR/culture, and skeptical perspectives with evidence traceability,
+            mandatory gates, debate, and post-debate revision.
+        </p>
     </div>
-
-    <div class="status">
-        ● Evaluation Engine Ready
-    </div>
-
 </header>
 
+<main id="main-content">
 
-<section class="hero">
+    <!-- INPUT SECTION -->
+    <section class="card" aria-labelledby="input-heading">
 
-    <h2>AI Multi-Agent Interview Evaluation</h2>
+        <h2 id="input-heading">Evaluation Inputs</h2>
 
-    <p>
-        Evidence-grounded candidate evaluation using four independent
-        AI personas, structured debate, deterministic scoring and
-        comparative decision making.
-    </p>
+        <p class="help">
+            Provide the job description and the resume/interview transcript
+            for each candidate. Evidence is derived from the supplied text.
+        </p>
 
-</section>
+        <form id="evaluationForm" novalidate>
 
+            <div class="grid">
 
-<!-- INPUT SECTION -->
+                <!-- JOB DESCRIPTION -->
+                <div class="full">
 
-<section class="card">
+                    <label for="jobDescription">
+                        Job Description
+                        <span class="required" aria-hidden="true">*</span>
+                    </label>
 
-    <h3>Start Evaluation</h3>
+                    <textarea
+                        id="jobDescription"
+                        name="jobDescription"
+                        required
+                        aria-required="true"
+                        aria-describedby="jd-help"
+                        placeholder="Paste the complete job description here..."
+                    ></textarea>
 
-    <div class="subtitle">
-        Enter the job description and candidate information.
-    </div>
+                    <p id="jd-help" class="help">
+                        Include the role responsibilities and mandatory requirements.
+                    </p>
 
-
-    <div class="grid">
-
-        <div class="full">
-
-            <label>Job Description</label>
-
-            <textarea
-                id="jd"
-                placeholder="Paste the job description here..."
-            ></textarea>
-
-        </div>
-
-
-        <div>
-
-            <label>Candidate A — Resume</label>
-
-            <textarea
-                id="resumeA"
-                placeholder="Paste Candidate A resume..."
-            ></textarea>
-
-        </div>
-
-
-        <div>
-
-            <label>Candidate B — Resume</label>
-
-            <textarea
-                id="resumeB"
-                placeholder="Paste Candidate B resume..."
-            ></textarea>
-
-        </div>
-
-
-        <div>
-
-            <label>Candidate A — Interview Transcript</label>
-
-            <textarea
-                id="transcriptA"
-                placeholder="Paste Candidate A interview transcript..."
-            ></textarea>
-
-        </div>
-
-
-        <div>
-
-            <label>Candidate B — Interview Transcript</label>
-
-            <textarea
-                id="transcriptB"
-                placeholder="Paste Candidate B interview transcript..."
-            ></textarea>
-
-        </div>
-
-    </div>
-
-
-    <!-- PIPELINE -->
-
-    <div class="pipeline">
-
-        <div class="step">
-
-            <div class="step-number">1</div>
-
-            <strong>Evidence</strong>
-
-            <small>
-                Resume + transcript
-            </small>
-
-        </div>
-
-
-        <div class="step">
-
-            <div class="step-number">2</div>
-
-            <strong>Blind Review</strong>
-
-            <small>
-                Four agents
-            </small>
-
-        </div>
-
-
-        <div class="step">
-
-            <div class="step-number">3</div>
-
-            <strong>Debate</strong>
-
-            <small>
-                Agent interaction
-            </small>
-
-        </div>
-
-
-        <div class="step">
-
-            <div class="step-number">4</div>
-
-            <strong>Revision</strong>
-
-            <small>
-                Post-debate
-            </small>
-
-        </div>
-
-
-        <div class="step">
-
-            <div class="step-number">5</div>
-
-            <strong>Decision</strong>
-
-            <small>
-                Candidate comparison
-            </small>
-
-        </div>
-
-    </div>
-
-
-    <div class="button-area">
-
-        <button onclick="runEvaluation()">
-            Run Evaluation →
-        </button>
-
-    </div>
-
-</section>
-
-
-<!-- RESULTS -->
-
-<section id="results">
-
-
-    <!-- AGENTS -->
-
-    <section class="card">
-
-        <h3>Independent Agent Panel</h3>
-
-        <div class="subtitle">
-            Each persona evaluates independently before interacting
-            with the other agents.
-        </div>
-
-
-        <div class="agent-grid">
-
-
-            <div class="agent">
-
-                <div class="agent-icon">⚙️</div>
-
-                <h4>Technical Agent</h4>
-
-                <div class="agent-score">
-                    8.7
                 </div>
 
-                <p>
-                    Evaluates Python/backend depth, AI/LLM systems,
-                    RAG, architecture and production reliability.
-                </p>
+                <!-- CANDIDATE A -->
+                <section class="candidate-card" aria-labelledby="candidateAHeading">
+
+                    <div class="candidate-title">
+                        <h3 id="candidateAHeading">Candidate A</h3>
+                        <span class="badge">CAND_A</span>
+                    </div>
+
+                    <label for="candidateAName">
+                        Candidate name
+                        <span class="required" aria-hidden="true">*</span>
+                    </label>
+
+                    <input
+                        id="candidateAName"
+                        name="candidateAName"
+                        type="text"
+                        required
+                        aria-required="true"
+                        style="
+                            width:100%;
+                            min-height:46px;
+                            padding:10px 12px;
+                            border:2px solid var(--border);
+                            border-radius:10px;
+                            margin-bottom:16px;
+                        "
+                        placeholder="Candidate A"
+                    >
+
+                    <label for="candidateAResume">
+                        Resume
+                        <span class="required" aria-hidden="true">*</span>
+                    </label>
+
+                    <textarea
+                        id="candidateAResume"
+                        name="candidateAResume"
+                        required
+                        aria-required="true"
+                        placeholder="Paste Candidate A's resume..."
+                    ></textarea>
+
+                    <label for="candidateATranscript">
+                        Interview transcript
+                        <span class="required" aria-hidden="true">*</span>
+                    </label>
+
+                    <textarea
+                        id="candidateATranscript"
+                        name="candidateATranscript"
+                        required
+                        aria-required="true"
+                        placeholder="Paste Candidate A's interview transcript..."
+                    ></textarea>
+
+                </section>
+
+                <!-- CANDIDATE B -->
+                <section class="candidate-card" aria-labelledby="candidateBHeading">
+
+                    <div class="candidate-title">
+                        <h3 id="candidateBHeading">Candidate B</h3>
+                        <span class="badge">CAND_B</span>
+                    </div>
+
+                    <label for="candidateBName">
+                        Candidate name
+                        <span class="required" aria-hidden="true">*</span>
+                    </label>
+
+                    <input
+                        id="candidateBName"
+                        name="candidateBName"
+                        type="text"
+                        required
+                        aria-required="true"
+                        style="
+                            width:100%;
+                            min-height:46px;
+                            padding:10px 12px;
+                            border:2px solid var(--border);
+                            border-radius:10px;
+                            margin-bottom:16px;
+                        "
+                        placeholder="Candidate B"
+                    >
+
+                    <label for="candidateBResume">
+                        Resume
+                        <span class="required" aria-hidden="true">*</span>
+                    </label>
+
+                    <textarea
+                        id="candidateBResume"
+                        name="candidateBResume"
+                        required
+                        aria-required="true"
+                        placeholder="Paste Candidate B's resume..."
+                    ></textarea>
+
+                    <label for="candidateBTranscript">
+                        Interview transcript
+                        <span class="required" aria-hidden="true">*</span>
+                    </label>
+
+                    <textarea
+                        id="candidateBTranscript"
+                        name="candidateBTranscript"
+                        required
+                        aria-required="true"
+                        placeholder="Paste Candidate B's interview transcript..."
+                    ></textarea>
+
+                </section>
 
             </div>
 
+            <div class="actions">
 
-            <div class="agent">
+                <button
+                    id="evaluateButton"
+                    class="primary-btn"
+                    type="submit"
+                >
+                    Evaluate Candidates
+                </button>
 
-                <div class="agent-icon">👥</div>
+                <button
+                    id="demoButton"
+                    class="secondary-btn"
+                    type="button"
+                >
+                    Load Demo Data
+                </button>
 
-                <h4>HR / Culture Agent</h4>
-
-                <div class="agent-score">
-                    8.1
-                </div>
-
-                <p>
-                    Evaluates communication, ownership,
-                    transparency, teamwork and stability.
-                </p>
-
-            </div>
-
-
-            <div class="agent">
-
-                <div class="agent-icon">🎯</div>
-
-                <h4>Hiring Manager Agent</h4>
-
-                <div class="agent-score">
-                    7.8
-                </div>
-
-                <p>
-                    Evaluates delivery capability, business impact,
-                    domain relevance and ramp-up speed.
-                </p>
+                <button
+                    id="clearButton"
+                    class="secondary-btn"
+                    type="button"
+                >
+                    Clear
+                </button>
 
             </div>
 
+            <!-- Live region for screen readers -->
+            <div
+                id="status"
+                class="status"
+                role="status"
+                aria-live="polite"
+                aria-atomic="true"
+            >
+                Ready for evaluation.
+            </div>
 
-            <div class="agent">
+        </form>
 
-                <div class="agent-icon">🔍</div>
+    </section>
 
-                <h4>Skeptic Agent</h4>
+    <!-- ARCHITECTURE -->
+    <section class="card" aria-labelledby="architecture-heading">
 
-                <div class="agent-score">
-                    7.1
-                </div>
+        <h2 id="architecture-heading">Evaluation Pipeline</h2>
 
-                <p>
-                    Searches for contradictions, unsupported claims,
-                    inflated achievements and hidden risks.
-                </p>
+        <div class="architecture">
 
+            <div class="architecture-step">
+                <strong>1. Evidence</strong>
+                <span>Resume + transcript become candidate-isolated evidence.</span>
+            </div>
+
+            <div class="architecture-step">
+                <strong>2. Independent Agents</strong>
+                <span>Four persona-bound evaluations are generated independently.</span>
+            </div>
+
+            <div class="architecture-step">
+                <strong>3. Debate + Revision</strong>
+                <span>Fixed debate ring plus adaptive disagreement edges.</span>
+            </div>
+
+            <div class="architecture-step">
+                <strong>4. Gates + Decision</strong>
+                <span>Validated revisions feed deterministic gates and comparison.</span>
             </div>
 
         </div>
 
     </section>
 
+    <!-- RESULTS -->
+    <section
+        id="resultsSection"
+        class="card hidden"
+        aria-labelledby="results-heading"
+    >
 
-    <!-- CANDIDATES -->
+        <h2 id="results-heading">Evaluation Results</h2>
 
-    <section class="card">
-
-        <h3>Candidate Results</h3>
-
-        <div class="subtitle">
-            Final scores after debate, revision and deterministic
-            eligibility checks.
-        </div>
-
-
-        <div class="candidates">
-
-
-            <div class="candidate">
-
-                <div class="candidate-header">
-
-                    <div class="candidate-name">
-                        Candidate A
-                    </div>
-
-                    <div class="eligible">
-                        ✓ ELIGIBLE
-                    </div>
-
-                </div>
-
-
-                <div class="score">
-                    8.2
-                </div>
-
-                <div style="color:#8993a6;font-size:12px;">
-                    Final score / 10
-                </div>
-
-
-                <div class="recommendation">
-                    STRONG HIRE
-                </div>
-
-
-                <ul>
-
-                    <li>
-                        Strong production ownership
-                    </li>
-
-                    <li>
-                        Relevant technical experience
-                    </li>
-
-                    <li>
-                        Strong evidence supporting delivery
-                    </li>
-
-                </ul>
-
-            </div>
-
-
-            <div class="candidate">
-
-                <div class="candidate-header">
-
-                    <div class="candidate-name">
-                        Candidate B
-                    </div>
-
-                    <div class="eligible">
-                        ✓ ELIGIBLE
-                    </div>
-
-                </div>
-
-
-                <div class="score">
-                    7.5
-                </div>
-
-                <div style="color:#8993a6;font-size:12px;">
-                    Final score / 10
-                </div>
-
-
-                <div class="recommendation">
-                    HIRE
-                </div>
-
-
-                <ul>
-
-                    <li>
-                        Strong communication
-                    </li>
-
-                    <li>
-                        Good adaptability
-                    </li>
-
-                    <li>
-                        Some technical uncertainty
-                    </li>
-
-                </ul>
-
-            </div>
-
-        </div>
+        <div
+            id="results"
+            aria-live="polite"
+        ></div>
 
     </section>
 
-
-    <!-- DEBATE -->
-
-    <section class="card">
-
-        <h3>Multi-Agent Debate</h3>
-
-        <div class="subtitle">
-            Agents challenge and respond to each other's reasoning.
-        </div>
-
-
-        <div class="debate">
-
-
-            <div class="message">
-
-                <strong>
-                    Technical → Skeptic
-                </strong>
-
-                <p>
-                    The candidate's production architecture claims
-                    are supported by documented implementation
-                    experience.
-                </p>
-
-            </div>
-
-
-            <div class="message">
-
-                <strong>
-                    Skeptic → Hiring Manager
-                </strong>
-
-                <p>
-                    Claimed performance improvements should be
-                    treated cautiously when the underlying benchmark
-                    is not independently established.
-                </p>
-
-            </div>
-
-
-            <div class="message">
-
-                <strong>
-                    Hiring Manager → HR / Culture
-                </strong>
-
-                <p>
-                    The interview demonstrates ownership and
-                    responsibility for delivered work.
-                </p>
-
-            </div>
-
-
-            <div class="message">
-
-                <strong>
-                    HR / Culture → Technical
-                </strong>
-
-                <p>
-                    The candidate's interview explanation is
-                    consistent with the technical responsibilities
-                    described in the resume.
-                </p>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- FINAL -->
-
-    <section class="card">
-
-        <div class="final">
-
-            <div class="final-label">
-                Recommended Candidate
-            </div>
-
-
-            <div class="winner">
-                Candidate A
-            </div>
-
-
-            <div class="confidence">
-                86% Confidence
-            </div>
-
-
-            <div class="reasoning">
-
-                Candidate A demonstrates the stronger combination
-                of technical capability, production ownership and
-                role relevance. Candidate B remains eligible and
-                competitive, but Candidate A has stronger evidence
-                supporting immediate delivery in the target role.
-
-            </div>
-
-        </div>
-
-    </section>
-
-</section>
-
+</main>
 
 <footer>
+    <p>
+        Multi-Agent AI Interview Evaluation Panel
+    </p>
 
-    HireLens — Evidence-Grounded Multi-Agent Hiring System
-
+    <p>
+        Evidence-grounded • Persona-isolated • Debate-enabled • Validated
+    </p>
 </footer>
-
-</div>
 
 
 <script>
+    /*
+     * ============================================================
+     * CONFIGURATION
+     * ============================================================
+     *
+     * IMPORTANT:
+     * Replace this with your deployed backend URL.
+     *
+     * Example:
+     *
+     * const API_URL = "https://your-backend-url.run.app";
+     *
+     * The frontend sends:
+     *
+     * POST /evaluate
+     *
+     * with:
+     * {
+     *   jd_text,
+     *   candidate_a,
+     *   candidate_b
+     * }
+     */
 
-/*
-===========================================================
-CLOUD RUN BACKEND URL
-===========================================================
-
-After deploying your backend to Cloud Run, put the URL here.
-
-Example:
-
-const API_URL = "https://your-service-xxxxx.run.app";
-
-Leave it empty for now to use demo mode.
-
-===========================================================
-*/
-
-const API_URL = "";
-
-
-/*
-===========================================================
-RUN EVALUATION
-===========================================================
-*/
-
-async function runEvaluation() {
-
-    const jd =
-        document.getElementById("jd").value.trim();
-
-    const resumeA =
-        document.getElementById("resumeA").value.trim();
-
-    const resumeB =
-        document.getElementById("resumeB").value.trim();
-
-    const transcriptA =
-        document.getElementById("transcriptA").value.trim();
-
-    const transcriptB =
-        document.getElementById("transcriptB").value.trim();
+    const API_URL = "";
 
 
-    if (!jd) {
+    /*
+     * ============================================================
+     * DOM ELEMENTS
+     * ============================================================
+     */
 
-        alert("Please enter the Job Description.");
+    const form = document.getElementById("evaluationForm");
+    const evaluateButton = document.getElementById("evaluateButton");
+    const demoButton = document.getElementById("demoButton");
+    const clearButton = document.getElementById("clearButton");
+    const statusBox = document.getElementById("status");
+    const resultsSection = document.getElementById("resultsSection");
+    const results = document.getElementById("results");
 
-        return;
 
-    }
+    /*
+     * ============================================================
+     * STATUS
+     * ============================================================
+     */
 
+    function setStatus(message, type = "") {
+        statusBox.textContent = message;
+        statusBox.className = "status";
 
-    if (!resumeA || !resumeB) {
-
-        alert("Please enter both candidate resumes.");
-
-        return;
-
+        if (type) {
+            statusBox.classList.add(type);
+        }
     }
 
 
     /*
-    =======================================================
-    REAL BACKEND REQUEST
-    =======================================================
-    */
+     * ============================================================
+     * HELPERS
+     * ============================================================
+     */
 
-    if (API_URL !== "") {
+    function escapeHtml(value) {
+        if (value === null || value === undefined) {
+            return "";
+        }
+
+        return String(value)
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("'", "&#039;");
+    }
+
+
+    function formatRecommendation(value) {
+        if (!value) {
+            return "Not available";
+        }
+
+        return String(value)
+            .replaceAll("_", " ")
+            .replace(/\b\w/g, char => char.toUpperCase());
+    }
+
+
+    function formatConfidence(value) {
+        if (value === null || value === undefined) {
+            return "N/A";
+        }
+
+        const number = Number(value);
+
+        if (Number.isNaN(number)) {
+            return escapeHtml(value);
+        }
+
+        return `${Math.round(number * 100)}%`;
+    }
+
+
+    function renderEvidenceIds(ids) {
+        if (!Array.isArray(ids) || ids.length === 0) {
+            return "";
+        }
+
+        return `
+            <div class="evidence">
+                Evidence:
+                ${ids.map(id => `<code>${escapeHtml(id)}</code>`).join(", ")}
+            </div>
+        `;
+    }
+
+
+    function renderReportPoint(point) {
+        if (!point) {
+            return "";
+        }
+
+        if (typeof point === "string") {
+            return `<li>${escapeHtml(point)}</li>`;
+        }
+
+        return `
+            <li>
+                ${escapeHtml(point.text || point.rationale || "No description")}
+                ${renderEvidenceIds(point.evidence_ids)}
+            </li>
+        `;
+    }
+
+
+    /*
+     * ============================================================
+     * CANDIDATE REPORT
+     * ============================================================
+     */
+
+    function renderCandidateReport(report) {
+
+        if (!report) {
+            return "";
+        }
+
+        const eligible = report.eligible === true;
+
+        const strengths = Array.isArray(report.strengths)
+            ? report.strengths
+            : [];
+
+        const concerns = Array.isArray(report.concerns)
+            ? report.concerns
+            : [];
+
+        const disagreements =
+            Array.isArray(report.unresolved_disagreements)
+                ? report.unresolved_disagreements
+                : [];
+
+        return `
+            <article class="report">
+
+                <div class="report-header">
+
+                    <div>
+                        <h3>
+                            ${escapeHtml(report.name || report.candidate_id)}
+                        </h3>
+
+                        <span>
+                            ${escapeHtml(report.candidate_id || "")}
+                        </span>
+                    </div>
+
+                    <div>
+                        ${
+                            eligible
+                                ? `<span class="eligible">ELIGIBLE</span>`
+                                : `<span class="ineligible">INELIGIBLE</span>`
+                        }
+                    </div>
+
+                </div>
+
+                <p>
+                    <strong>Final recommendation:</strong>
+                    ${formatRecommendation(report.final_recommendation)}
+                </p>
+
+                <p>
+                    <strong>Confidence:</strong>
+                    ${formatConfidence(report.confidence)}
+                </p>
+
+                <p>
+                    <strong>Final score:</strong>
+                    <span class="score">
+                        ${escapeHtml(report.final_score ?? "N/A")}
+                    </span>
+                </p>
+
+                <section class="report-section"
+                    aria-labelledby="${escapeHtml(report.candidate_id)}-strengths">
+
+                    <h4 id="${escapeHtml(report.candidate_id)}-strengths">
+                        Strengths
+                    </h4>
+
+                    ${
+                        strengths.length
+                            ? `<ul>${strengths.map(renderReportPoint).join("")}</ul>`
+                            : `<p class="help">No established strengths reported.</p>`
+                    }
+
+                </section>
+
+                <section class="report-section"
+                    aria-labelledby="${escapeHtml(report.candidate_id)}-concerns">
+
+                    <h4 id="${escapeHtml(report.candidate_id)}-concerns">
+                        Concerns
+                    </h4>
+
+                    ${
+                        concerns.length
+                            ? `<ul>${concerns.map(renderReportPoint).join("")}</ul>`
+                            : `<p class="help">No established concerns reported.</p>`
+                    }
+
+                </section>
+
+                ${
+                    disagreements.length
+                        ? `
+                            <section class="report-section">
+                                <h4>Unresolved disagreements</h4>
+
+                                <ul>
+                                    ${disagreements.map(d => `
+                                        <li>
+                                            <strong>
+                                                ${escapeHtml(d.criterion || "Criterion")}
+                                            </strong>
+                                            <br>
+                                            ${escapeHtml(d.description || "")}
+                                            ${renderEvidenceIds(d.evidence_ids)}
+                                        </li>
+                                    `).join("")}
+                                </ul>
+                            </section>
+                        `
+                        : ""
+                }
+
+            </article>
+        `;
+    }
+
+
+    /*
+     * ============================================================
+     * RESULTS RENDERING
+     * ============================================================
+     */
+
+    function renderResults(data) {
+
+        resultsSection.classList.remove("hidden");
+
+        const decision = data.comparative_decision || data.decision || {};
+
+        const candidateA =
+            data.candidate_a ||
+            data.candidateA ||
+            data.A;
+
+        const candidateB =
+            data.candidate_b ||
+            data.candidateB ||
+            data.B;
+
+        results.innerHTML = `
+
+            <section class="decision"
+                aria-labelledby="decision-heading">
+
+                <h3 id="decision-heading">
+                    Comparative Decision
+                </h3>
+
+                <p class="decision-value">
+                    ${formatRecommendation(
+                        decision.selected_candidate_id
+                    )}
+                </p>
+
+                <p>
+                    <strong>Confidence:</strong>
+                    ${formatConfidence(decision.confidence)}
+                </p>
+
+                <p>
+                    <strong>Reasoning:</strong><br>
+                    ${escapeHtml(decision.reasoning || "No reasoning supplied.")}
+                </p>
+
+                ${renderEvidenceIds(decision.evidence_ids)}
+
+            </section>
+
+            <div class="report-grid">
+
+                ${renderCandidateReport(candidateA)}
+
+                ${renderCandidateReport(candidateB)}
+
+            </div>
+
+            <details>
+
+                <summary>
+                    View complete API response
+                </summary>
+
+                <div class="details-content">
+
+                    <pre>${escapeHtml(
+                        JSON.stringify(data, null, 2)
+                    )}</pre>
+
+                </div>
+
+            </details>
+        `;
+
+        resultsSection.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+    }
+
+
+    /*
+     * ============================================================
+     * VALIDATION
+     * ============================================================
+     */
+
+    function getInputData() {
+
+        const jd = document.getElementById("jobDescription").value.trim();
+
+        const candidateAName =
+            document.getElementById("candidateAName").value.trim();
+
+        const candidateAResume =
+            document.getElementById("candidateAResume").value.trim();
+
+        const candidateATranscript =
+            document.getElementById("candidateATranscript").value.trim();
+
+        const candidateBName =
+            document.getElementById("candidateBName").value.trim();
+
+        const candidateBResume =
+            document.getElementById("candidateBResume").value.trim();
+
+        const candidateBTranscript =
+            document.getElementById("candidateBTranscript").value.trim();
+
+
+        if (!jd) {
+            throw new Error("Please enter the Job Description.");
+        }
+
+        if (!candidateAName) {
+            throw new Error("Please enter Candidate A's name.");
+        }
+
+        if (!candidateAResume) {
+            throw new Error("Please enter Candidate A's resume.");
+        }
+
+        if (!candidateATranscript) {
+            throw new Error("Please enter Candidate A's interview transcript.");
+        }
+
+        if (!candidateBName) {
+            throw new Error("Please enter Candidate B's name.");
+        }
+
+        if (!candidateBResume) {
+            throw new Error("Please enter Candidate B's resume.");
+        }
+
+        if (!candidateBTranscript) {
+            throw new Error("Please enter Candidate B's interview transcript.");
+        }
+
+
+        return {
+            jd_text: jd,
+
+            candidate_a: {
+                candidate_id: "CAND_A",
+                name: candidateAName,
+                resume: candidateAResume,
+                transcript: candidateATranscript
+            },
+
+            candidate_b: {
+                candidate_id: "CAND_B",
+                name: candidateBName,
+                resume: candidateBResume,
+                transcript: candidateBTranscript
+            }
+        };
+    }
+
+
+    /*
+     * ============================================================
+     * API REQUEST
+     * ============================================================
+     */
+
+    async function evaluateCandidates() {
+
+        if (!API_URL) {
+            throw new Error(
+                "Backend URL is not configured. Set API_URL in index.html."
+            );
+        }
+
+        const payload = getInputData();
+
+        evaluateButton.disabled = true;
+        evaluateButton.textContent = "Evaluating...";
+        setStatus(
+            "Evaluation in progress. Running independent agents, debate, revision, gates, and final comparison.",
+            "loading"
+        );
 
         try {
 
             const response = await fetch(
-                API_URL + "/evaluate",
+                `${API_URL.replace(/\/$/, "")}/evaluate`,
                 {
                     method: "POST",
 
                     headers: {
-                        "Content-Type": "application/json"
+                        "Content-Type": "application/json",
+                        "Accept": "application/json"
                     },
 
-                    body: JSON.stringify({
-
-                        jd: jd,
-
-                        candidate_a: {
-
-                            resume: resumeA,
-
-                            transcript: transcriptA
-
-                        },
-
-                        candidate_b: {
-
-                            resume: resumeB,
-
-                            transcript: transcriptB
-
-                        }
-
-                    })
-
+                    body: JSON.stringify(payload)
                 }
             );
+
+            const text = await response.text();
+
+            let data;
+
+            try {
+                data = JSON.parse(text);
+            } catch {
+                data = {
+                    raw_response: text
+                };
+            }
 
 
             if (!response.ok) {
 
-                throw new Error(
-                    "Server returned " + response.status
-                );
+                const message =
+                    data.detail ||
+                    data.error ||
+                    data.message ||
+                    "Backend evaluation failed.";
 
+                throw new Error(message);
             }
 
 
-            const data =
-                await response.json();
+            renderResults(data);
 
-
-            displayBackendResult(data);
-
+            setStatus(
+                "Evaluation completed successfully.",
+                "success"
+            );
 
         } catch (error) {
 
             console.error(error);
 
-            alert(
-                "Could not connect to the Cloud Run backend."
+            setStatus(
+                error.message || "An unexpected error occurred.",
+                "error"
             );
 
+        } finally {
+
+            evaluateButton.disabled = false;
+            evaluateButton.textContent = "Evaluate Candidates";
         }
-
-        return;
-
     }
 
 
     /*
-    =======================================================
-    DEMO MODE
-    =======================================================
+     * ============================================================
+     * DEMO DATA
+     * ============================================================
+     */
 
-    This displays the frontend while the backend is being
-    deployed.
+    demoButton.addEventListener("click", () => {
 
-    =======================================================
-    */
+        document.getElementById("jobDescription").value =
+`AI/ML Engineer
 
-    const results =
-        document.getElementById("results");
+We are looking for an engineer who can build reliable Python backends and AI/LLM applications.
 
-    results.style.display = "block";
+Required:
+- Strong Python/backend development
+- Experience with AI/LLM systems
+- Ability to build reliable production systems
+- Good communication and ownership
+- Experience working with data or retrieval systems is preferred.`;
 
-    results.scrollIntoView({
-        behavior: "smooth"
+        document.getElementById("candidateAName").value =
+            "Candidate A";
+
+        document.getElementById("candidateAResume").value =
+`Built Python backend services for production applications.
+Implemented LLM-based applications and retrieval pipelines.
+Worked with REST APIs and automated testing.`;
+
+        document.getElementById("candidateATranscript").value =
+`I owned the backend deployment for my previous project.
+I implemented a retrieval system and monitored production failures.
+I worked with the frontend and product teams to deliver the system.`;
+
+        document.getElementById("candidateBName").value =
+            "Candidate B";
+
+        document.getElementById("candidateBResume").value =
+`Worked on software projects using Python.
+Built several prototypes involving machine learning.
+Used APIs and databases in academic projects.`;
+
+        document.getElementById("candidateBTranscript").value =
+`I have mostly worked on prototypes.
+I have not personally managed a production AI deployment.
+I would like to improve my backend and LLM engineering skills.`;
+
+        setStatus(
+            "Demo data loaded. Review it before evaluating.",
+            "success"
+        );
     });
 
-}
 
+    /*
+     * ============================================================
+     * CLEAR
+     * ============================================================
+     */
 
-/*
-===========================================================
-BACKEND RESULT HANDLER
-===========================================================
+    clearButton.addEventListener("click", () => {
 
-This function is ready for connection to your backend.
+        form.reset();
 
-The exact field names can be adjusted once the final
-FastAPI response schema is fixed.
-===========================================================
-*/
+        results.innerHTML = "";
+        resultsSection.classList.add("hidden");
 
-function displayBackendResult(data) {
+        setStatus("Form cleared.");
 
-    console.log(
-        "Backend evaluation:",
-        data
-    );
-
-
-    const results =
-        document.getElementById("results");
-
-    results.style.display = "block";
-
-
-    results.scrollIntoView({
-        behavior: "smooth"
+        document.getElementById("jobDescription").focus();
     });
 
-}
 
+    /*
+     * ============================================================
+     * FORM SUBMISSION
+     * ============================================================
+     */
 
-/*
-===========================================================
-CTRL + ENTER SHORTCUT
-===========================================================
-*/
+    form.addEventListener("submit", async event => {
 
-document
-    .getElementById("jd")
-    .addEventListener(
-        "keydown",
-        function(event) {
+        event.preventDefault();
 
-            if (
-                event.ctrlKey &&
-                event.key === "Enter"
-            ) {
+        try {
+            await evaluateCandidates();
+        } catch (error) {
 
-                runEvaluation();
-
-            }
-
+            setStatus(
+                error.message || "Please check your inputs.",
+                "error"
+            );
         }
-    );
-
+    });
 </script>
 
 </body>
